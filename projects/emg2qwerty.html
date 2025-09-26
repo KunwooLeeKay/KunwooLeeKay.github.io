@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>EMG→QWERTY: Hands-Free Typing via sEMG – Kunwoo Lee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0b0c10; --panel:#111218; --text:#e9eaee; --muted:#b6b8c3;
+    --border:#232533; --accent:#6ee7b7; --radius:16px; --maxw:980px;
+  }
+  [data-theme="light"]{
+    --bg:#ffffff; --panel:#f6f7fb; --text:#111218; --muted:#4b5563;
+    --border:#e5e7eb; --accent:#059669;
+  }
+
+  body{margin:0;font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text);line-height:1.65}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:24px}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
+  a{color:var(--text);text-decoration:none} a:hover{color:var(--accent)}
+  .topbar{display:flex;justify-content:space-between;gap:12px;margin-bottom:12px}
+  .back{display:inline-block;border:1px solid var(--border);padding:8px 12px;border-radius:10px}
+  .btn{appearance:none;border:1px solid var(--border);background:transparent;color:var(--text);
+       padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:500}
+  .btn:hover{border-color:var(--accent)}
+
+  h1{margin:.2rem 0 .5rem;font-size:1.7rem}
+  h2{margin:1.25rem 0 .5rem;font-size:1.18rem}
+  .muted{color:var(--muted)}
+  .tagrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .tag{border:1px dashed var(--border);border-radius:999px;padding:4px 10px;font-size:.85rem;color:var(--muted)}
+  section{margin:20px 0}
+  .box{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;padding:12px}
+  .bullet{margin:.35rem 0 0 1.1rem}
+
+  table{width:100%;border-collapse:collapse;margin:10px 0;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  th,td{padding:10px;border-bottom:1px solid var(--border);text-align:left}
+  th{background:rgba(255,255,255,.03);font-weight:600}
+  tr:last-child td{border-bottom:none}
+  code,kbd{background:#0d0e13;border:1px solid var(--border);border-radius:6px;padding:0 6px}
+  footer{margin-top:18px;color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="back" href="../index.html">← Back to Home</a>
+      <button class="btn" id="themeToggle" aria-pressed="false" title="Toggle light/dark">🌓 Theme</button>
+    </div>
+
+    <article class="card">
+      <header>
+        <h1>EMG→QWERTY: Towards Keyboards-Free Typing via sEMG</h1>
+      <p class="muted">
+        Exploring <strong>Transformer/Conformer encoders</strong> for mapping wrist sEMG signals to virtual keyboard input.  
+        Based on datasets open-sourced by Meta: 
+        <a href="https://ai.meta.com/blog/open-sourcing-surface-electromyography-datasets-neurips-2024/" target="_blank" rel="noopener">
+          Surface Electromyography Datasets (NeurIPS&nbsp;2024)
+        </a>.
+      </p>        
+        <div class="tagrow">
+          <span class="tag">sEMG</span>
+          <span class="tag">Conformer/Transformer</span>
+          <span class="tag">CTC</span>
+          <span class="tag">HCI</span>
+        </div>
+      </header>
+      <figure style="text-align:center; margin:24px auto; max-width:640px;">
+        <video autoplay loop muted playsinline
+              style="width:100%; border-radius:12px; box-shadow:0 6px 24px rgba(0,0,0,.12);">
+          <source src="emg2qwerty_figures/demo_downsized.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <figcaption style="margin-top:8px; font-size:.9rem; color:var(--muted);">
+          Demo of EMG→QWERTY typing.
+          <a href="https://ai.meta.com/blog/open-sourcing-surface-electromyography-datasets-neurips-2024/"
+            target="_blank" rel="noopener">(Meta AI, NeurIPS&nbsp;2024)</a>
+        </figcaption>
+      </figure>
+      <!-- Project info (short) -->
+      <section class="box">
+        <p>
+          We explore surface electromyography (sEMG) as a typing interface for spatial/VR computing, replacing physical keyboards with
+          muscle-driven input. Using a large public dataset and attention-based encoders, our causal, online models reduce character error rate (CER)
+          from a TDS baseline to <strong>20.34% (online), without personalization</strong>. The approach
+          preserves the familiar “typing” mental model while removing hardware constraints.
+        </p>
+      </section>
+
+      <section>
+        <h2>Why this matters</h2>
+        <p>
+          Gaze or hand-ray input in head-mounted displays is slow and fatiguing. sEMG offers silent, head-up, eyes-free text entry that can work
+          without a desk. The challenge: high inter-user variability, sensor placement shifts, and the need for low-latency decoding that still
+          captures co-articulation and temporal context in muscle activity.
+        </p>
+      </section>
+
+      <section>
+        <h2>Dataset (emg2qwerty)</h2>
+        <p>
+          We use a large-scale dataset of non-invasive wrist sEMG for touch typing (108 users, ~346 hours). Signals are recorded at 2 kHz from
+          32 channels (16 per hand). We visualize inter-channel correlations, note strong adjacency effects (up to ~2 neighbors), and apply
+          augmentations that promote rotational and temporal robustness (band rotation, temporal alignment jitter, SpecAugment). 
+        </p>
+      </section>
+
+      <section>
+        <h2>Methods in 60 seconds</h2>
+        <ul class="bullet">
+          <li><strong>Input & features:</strong> 32-ch sEMG → log-spectrograms with normalization and rotation-invariant adaptation layers.</li>
+          <li><strong>Encoders:</strong> Baseline TDS; our variants add a <em>Transformer</em> layer stack or replace with a compact <em>Conformer</em> encoder.</li>
+          <li><strong>Training:</strong> CTC loss; online/causal setup for real-time use; augmentation for user/session variability.</li>
+          <li><strong>Decoding:</strong> Greedy or beam search; optional LMs (6-gram char LM, Flan-T5, GPT-4-turbo) for correction.</li>
+          <li><strong>Metrics:</strong> CER overall and by error type (subs/ins/del); online (streaming) vs. offline modes.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Models</h2>
+        <div class="box">
+          <p><strong>TDS (Baseline)</strong> — Efficient conv blocks with ~1 s receptive field; rotation-invariant pre-module and SpecAugment.</p>
+          <p><strong>Transformer Encoder</strong> — 4× projection bottleneck (e.g., 768→192) before a compact Transformer; self-attention captures
+          long-range dependencies to disambiguate similar muscle patterns.</p>
+          <p><strong>Conformer Encoder</strong> — 3 layers / 6 heads; fuses local convolution with global attention. Tuned for short sequences and multi-channel input.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Results (CER)</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Decoder</th>
+              <th>Language Model</th>
+              <th>Generic CER<br>(Online vs. Offline)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>TDS (baseline, causal)</td>
+              <td>Greedy</td>
+              <td>None</td>
+              <td>24.98 <span class="muted">/</span> 58.32</td>
+            </tr>
+            <tr>
+              <td>TDS + Transformer Enc.</td>
+              <td>Greedy</td>
+              <td>None</td>
+              <td>21.60 <span class="muted">/</span> 44.43</td>
+            </tr>
+            <tr>
+              <td>Conformer</td>
+              <td>Greedy</td>
+              <td>None</td>
+              <td><strong>20.34</strong> <span class="muted">/</span> 43.21</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="muted" style="margin-top:6px; font-size:.9rem;">
+          Note: “Online” = 4-seconds time-windowed;  
+          “Offline” = full input sequence input.
+        </p>
+        <p class="muted">
+          Personalized decoding comparisons (offline) also explored classic 6-gram char LM and light LLM-assisted correction; sentence-level GPT-4-turbo
+          achieved the best personalized CER among tested options while introducing trade-offs in exact reproduction of tokens (e.g., passwords).
+        </p>
+
+        <table>
+          <thead>
+            <tr><th>Model</th><th>Decoder</th><th>LM</th><th>Personalized CER (Offline)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>TDS (baseline, causal)</td><td>Beam</td><td>6-gram Char LM</td><td>45.55</td></tr>
+            <tr><td>TDS (baseline, causal)</td><td>Beam</td><td>Flan-T5 (space-level)</td><td>28.55</td></tr>
+            <tr><td>TDS (baseline, causal)</td><td>Beam</td><td>Flan-T5 (sentence-level)</td><td>42.65</td></tr>
+            <tr><td>TDS (baseline, causal)</td><td>Beam</td><td>GPT-4-turbo (space-level)</td><td>28.11</td></tr>
+            <tr><td>TDS (baseline, causal)</td><td>Beam</td><td>GPT-4-turbo (sentence-level)</td><td>27.65</td></tr>
+            <tr><td>TDS (baseline, causal)</td><td>Greedy</td><td>Flan-T5 (space-level)</td><td>28.55</td></tr>
+            <tr><td>TDS (baseline, causal)</td><td>Greedy</td><td>Flan-T5 (sentence-level)</td><td>42.65</td></tr>
+            <tr><td>TDS (baseline, causal)</td><td>Greedy</td><td>GPT-4-turbo (space-level)</td><td>24.98</td></tr>
+            <tr><td>TDS (baseline, causal)</td><td>Greedy</td><td>GPT-4-turbo (sentence-level)</td><td><strong>22.71</strong></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- <section>
+        <h2>Decoding & Language Models</h2>
+        <p>
+          We compare greedy vs. beam with character LMs and lightweight LLM corrections. In practice, small LMs improve fluency but can alter
+          exact strings; for sensitive inputs, correction strategies should be constrained (e.g., disable substitutions inside <kbd>password</kbd> fields).
+        </p>
+      </section> -->
+
+      <section>
+        <h2>Future work</h2>
+        <ul class="bullet">
+          <li><strong>Causality:</strong> Converting the acausal baseline to causal only slightly increased CER, supporting real-time feasibility.</li>
+          <li><strong>Latency target:</strong> Current online windowing adds delay; aim for ≤50–100 ms using short stride windows with long padded context.</li>
+          <li><strong>Prediction:</strong> Exploit EMG leading motion by tens of ms for anticipatory decoding.</li>
+          <li><strong>Generalization:</strong> Continue adapting to user variability (rotation-invariant layers, robust normalization, session adaptation).</li>
+        </ul>
+      </section>
+<!-- 
+      <section class="box">
+        <h2>Downloads & code</h2>
+        <p>
+          • <a href="../assets/IDL_Final_Report-2.pdf" target="_blank" rel="noopener">Project report (PDF)</a><br/>
+          • <a href="https://github.com/KunwooLeeKay/emg2qwerty" target="_blank" rel="noopener">GitHub – emg2qwerty</a>
+        </p>
+      </section> -->
+    </article>
+
+    <footer>© <script>document.write(new Date().getFullYear())</script> Kunwoo Lee</footer>
+  </div>
+
+  <script>
+    // Theme: read saved preference & allow toggling
+    const root = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    if (saved) root.setAttribute('data-theme', saved);
+
+    const btn = document.getElementById('themeToggle');
+    const setTheme = (mode) => {
+      root.setAttribute('data-theme', mode);
+      localStorage.setItem('theme', mode);
+      btn?.setAttribute('aria-pressed', String(mode === 'light'));
+    };
+    btn?.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      setTheme(next);
+    });
+    btn?.setAttribute('aria-pressed', String(root.getAttribute('data-theme') === 'light'));
+  </script>
+</body>
+</html>

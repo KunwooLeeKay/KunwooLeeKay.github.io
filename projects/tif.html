@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PDF Viewer</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+    body {
+      display: flex;
+      justify-content: center;  /* center horizontally */
+      align-items: center;      /* center vertically */
+      background: #f4f4f4;      /* optional: gives contrast around PDF */
+    }
+    embed {
+      width: 75%;
+      height: 90%;  /* leave a little margin at top/bottom */
+      border: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2); /* optional styling */
+    }
+  </style>
+</head>
+<body>
+  <embed src="tif_figures/tif_poster.pdf" type="application/pdf">
+</body>
+</html>

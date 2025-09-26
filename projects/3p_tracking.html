@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Physical Therapy Assessment Automation – Kunwoo Lee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0b0c10; --panel:#111218; --text:#e9eaee; --muted:#b6b8c3;
+    --border:#232533; --accent:#6ee7b7; --radius:16px; --maxw:980px;
+    --canvas:#ffffff; --canvas-border:#e5e7eb;
+  }
+  [data-theme="light"]{
+    --bg:#ffffff; --panel:#f6f7fb; --text:#111218; --muted:#4b5563;
+    --border:#e5e7eb; --accent:#059669;
+    --canvas:#ffffff; --canvas-border:#e5e7eb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text);line-height:1.65}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:24px}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
+  a{color:var(--text);text-decoration:none}
+  a:hover{color:var(--accent)}
+  .topbar{display:flex;justify-content:space-between;gap:12px;margin-bottom:12px}
+  .back{display:inline-block;border:1px solid var(--border);padding:8px 12px;border-radius:10px}
+  .btn{appearance:none;border:1px solid var(--border);background:transparent;color:var(--text);
+       padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:500}
+  .btn:hover{border-color:var(--accent)}
+  h1{margin:6px 0;font-size:1.7rem}
+  h2{margin:1.1rem 0 .5rem;font-size:1.22rem}
+  h3{margin:1rem 0 .25rem}
+  .muted{color:var(--muted)}
+  .tagrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .tag{border:1px dashed var(--border);border-radius:999px;padding:4px 10px;font-size:.85rem;color:var(--muted)}
+  section{margin:20px 0}
+
+  /* Figure canvas */
+  figure{margin:0}
+  .canvas{
+    background:var(--canvas);
+    border:1px solid var(--canvas-border);
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 6px 24px rgba(0,0,0,.12);
+  }
+  .canvas > *{display:block;width:100%}
+  figcaption{margin:.5rem .75rem .75rem;color:var(--muted);font-size:.95rem}
+
+  /* Grid rows */
+  .row{display:grid;gap:18px;align-items:center}
+  @media(min-width:900px){ .row.two {grid-template-columns:1.1fr .9fr} }
+  @media(max-width:900px){ .row.two {grid-template-columns:1fr} }
+
+  .bullet{margin:.35rem 0 0 1.1rem}
+
+  /* More-to-come block */
+  .upnext{
+    border:1px dashed var(--border);
+    border-radius:12px;
+    padding:14px;
+    background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.02));
+  }
+  .upnext h3{
+    display:flex; align-items:center; gap:.5rem; margin:.2rem 0 .4rem;
+  }
+  .upnext h3 .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block}
+  .upnext ul{margin:.4rem 0 0; padding-left:1.1rem}
+  .upnext li{margin:.35rem 0}
+  .upnext .note{margin-top:.6rem; font-size:.92rem; color:var(--muted)}
+
+  footer{margin-top:18px;color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="back" href="../index.html">← Back to Home</a>
+      <button class="btn" id="themeToggle" aria-pressed="false" title="Toggle light/dark">🌓 Theme</button>
+    </div>
+
+    <article class="card">
+      <header>
+        <h1>Sparse-Sensor Motion Tracking for Accessible Biomechanics</h1>
+        <p class="muted">Using VR (Meta Quest Pro) for motion tracking.</p>
+        <div class="tagrow">
+          <span class="tag">Generative AI</span>
+          <span class="tag">Biomechanics</span>
+          <span class="tag">Movement Analysis</span>
+        </div>
+      </header>
+
+      <!-- At a glance -->
+      <section>
+        <p>
+          As a mission to push biomechanics further into real-world applications, where it is even more accessible,
+          preferrably with extremely sparse set of sensors, i.e. two hand held controllers and a headset, we are working
+          with Meta Quest Pro to generate full body human motion from their built-in IMUs. This work is in collaboration with
+          Emory University. Building on some preliminary work achieved with Meta, we are now working on a more robust system that can handle
+          more variety type of movements that are out-of-distribution such as single-legged exercises.
+        </p>
+      </section>
+
+      <!-- Figure 1 -->
+      <section aria-labelledby="f1">
+        <h2 id="f1">Example baseline output</h2>
+        <figure class="canvas">
+          <video controls style="width:100%; border-radius:12px; box-shadow:0 6px 24px rgba(0,0,0,.12);">
+            <source src="3p_tracking_figures/3p_tracking_squat.mov" type="video/quicktime">
+            <source src="3p_tracking_figures/3p_tracking_squat.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <figcaption>
+            For a more predictable movement such as squatting, the baseline model trained on AMASS works well. Here, we show an example of output.
+          </figcaption>
+        </figure>
+      </section>
+
+      <!-- Figure 2 -->
+      <section aria-labelledby="f2">
+        <h2 id="f2">Challenging OOD motion</h2>
+        <figure class="canvas">
+          <video controls style="width:100%; border-radius:12px; box-shadow:0 6px 24px rgba(0,0,0,.12);">
+            <source src="3p_tracking_figures/3p_tracking_SLH.mov" type="video/quicktime">
+            <source src="3p_tracking_figures/3p_tracking_SLH.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <figcaption>
+            For less predictable movements such as single-legged hop, the baseline model fails to capture separate leg movements.
+          </figcaption>
+        </figure>
+      </section>
+
+      <!-- More to come -->
+      <section aria-labelledby="upnext">
+        <div class="upnext">
+          <h3 id="upnext"><span class="dot"></span> More to come</h3>
+          <ul>
+            <li><strong>Robust OOD handling:</strong> single-leg exercises, lateral hops, and abrupt direction changes.</li>
+            <li><strong>Sensor fusion:</strong> integrate wrist/ankle IMUs and depth/RGB for harder motions.</li>
+            <li><strong>Physics-aware priors:</strong> contact-aware losses and joint-limit regularization.</li>
+            <li><strong>Evaluation suite:</strong> standardized accuracy/temporal metrics vs. marker-based benchmarks.</li>
+            <li><strong>Demo app:</strong> local web viewer for real-time visualization on Quest captures.</li>
+            <li><strong>Open materials:</strong> model weights and a small curated sample set (as licensing allows).</li>
+          </ul>
+          <p class="note">Have a task we should test? <a href="mailto:kunwool@andrew.cmu.edu">Email me</a> with a short clip or description.</p>
+        </div>
+      </section>
+
+    </article>
+
+    <footer>© <script>document.write(new Date().getFullYear())</script> Kunwoo Lee</footer>
+  </div>
+
+  <script>
+    // Theme toggle
+    const root = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    if (saved) root.setAttribute('data-theme', saved);
+    const btn = document.getElementById('themeToggle');
+    const setTheme = (mode) => {
+      root.setAttribute('data-theme', mode);
+      localStorage.setItem('theme', mode);
+      btn?.setAttribute('aria-pressed', String(mode === 'light'));
+    };
+    btn?.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      setTheme(next);
+    });
+    btn?.setAttribute('aria-pressed', String(root.getAttribute('data-theme') === 'light'));
+  </script>
+</body>
+</html>

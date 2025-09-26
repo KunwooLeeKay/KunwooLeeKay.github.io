@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Physical Therapy Assessment Automation – Kunwoo Lee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:#0b0c10; --panel:#111218; --text:#e9eaee; --muted:#b6b8c3;
+    --border:#232533; --accent:#6ee7b7; --radius:16px; --maxw:980px;
+    --canvas:#ffffff; --canvas-border:#e5e7eb;
+  }
+  [data-theme="light"] {
+    --bg:#ffffff; --panel:#f6f7fb; --text:#111218; --muted:#4b5563;
+    --border:#e5e7eb; --accent:#059669;
+    --canvas:#ffffff; --canvas-border:#e5e7eb;
+  }
+  * { box-sizing:border-box }
+  body {
+    margin:0; font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    background:var(--bg); color:var(--text); line-height:1.65;
+  }
+  .wrap { max-width:var(--maxw); margin:0 auto; padding:24px }
+  .card { background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:22px }
+  a { color:var(--text); text-decoration:none }
+  a:hover { color:var(--accent) }
+  .topbar { display:flex; justify-content:space-between; gap:12px; margin-bottom:12px }
+  .back { display:inline-block; border:1px solid var(--border); padding:8px 12px; border-radius:10px }
+  .btn {
+    appearance:none; border:1px solid var(--border); background:transparent; color:var(--text);
+    padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:500;
+  }
+  .btn:hover { border-color:var(--accent) }
+  h1 { margin:6px 0; font-size:1.7rem }
+  h2 { margin:1.1rem 0 .5rem; font-size:1.22rem }
+  .muted { color:var(--muted) }
+  .tagrow { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px }
+  .tag { border:1px dashed var(--border); border-radius:999px; padding:4px 10px; font-size:.85rem; color:var(--muted) }
+  section { margin:20px 0 }
+
+  /* Figures */
+  figure { margin:0 }
+  .canvas {
+    background:var(--canvas);
+    border:1px solid var(--canvas-border);
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 6px 24px rgba(0,0,0,.12);
+  }
+  .canvas > * { display:block; width:100% }
+  figcaption { margin:.5rem .75rem .75rem; color:var(--muted); font-size:.95rem }
+
+  .row { display:grid; gap:18px; align-items:center }
+  @media(min-width:900px){ .row.two { grid-template-columns:1.1fr .9fr } }
+  @media(max-width:900px){ .row.two { grid-template-columns:1fr } }
+
+  figcaption {
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  color: var(--muted);
+  background: rgba(255,255,255,0.05); /* subtle contrast */
+  border-top: 1px solid var(--canvas-border);
+  font-style: italic;
+  text-align: center;
+  }
+  [data-theme="light"] figcaption {
+    background: rgba(0,0,0,0.03);
+  }
+
+  footer { margin-top:18px; color:var(--muted); font-size:.9rem; text-align:center }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="back" href="../index.html">← Back to Home</a>
+      <button class="btn" id="themeToggle" aria-pressed="false" title="Toggle light/dark">🌓 Theme</button>
+    </div>
+
+    <article class="card">
+      <header>
+        <h1>Physical Therapy Assessment Automation from Uncalibrated Inputs</h1>
+        <p class="muted">Uncalibrated RGB + IMU pipeline for automated PT performance evaluation</p>
+        <div class="tagrow">
+          <span class="tag">Computer Vision</span>
+          <span class="tag">IMU</span>
+          <span class="tag">Machine Learning</span>
+          <span class="tag">Physical Therapy</span>
+        </div>
+      </header>
+
+      <!-- Overview -->
+      <section>
+        <p>
+          We evaluate PT exercise quality of patients using <strong>uncalibrated</strong> multi-view video and wearable IMUs.
+          The pipeline <strong>auto-calibrates</strong> cameras and IMU-to-bone alignment to fit a statistical body model
+          to recover joint kinematics. Using these kinematics as input features, we train a classifier to identify exercise errors.
+          Our method, trained on <strong>38 subjects</strong> performing step-ups (509 correct / 315 incorrect), approaches
+          <em>inter-clinician agreement</em> when used with more than one camera—suggesting its potential for automating PT assessment
+          in both clinical and at-home settings.
+        </p>
+      </section>
+
+      <!-- Figure 1 -->
+      <section aria-labelledby="f1">
+        <h2 id="f1">Method: Autocalibration</h2>
+        <figure class="canvas">
+          <img src="cmlh_figures/f1.png" alt="Two-camera setup and optimization that recovers second-view extrinsics while fitting the body model." />
+          <figcaption>
+            Two grayscale cameras (~90°) capture motion; OpenPose detects 2D joints. We fit a 3D body mesh and jointly optimize the second camera’s extrinsics,
+            then fuse 8 IMUs with the mesh, automatically aligning sensors to bones.
+          </figcaption>
+        </figure>
+      </section>
+
+      <!-- Qualitative results -->
+      <section aria-labelledby="qual">
+        <h2 id="qual">Qualitative Output</h2>
+        <div class="row two">
+          <figure class="canvas" style="padding-left:5px;">
+            <video autoplay loop muted playsinline>
+              <source src="cmlh_figures/qualitative_demo.mov" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <figcaption>
+              Baseline qualitative demo: the bottom-row subject shows insufficient knee flexion, detected reliably by our auto-calibrated pipeline.
+            </figcaption>
+          </figure>
+
+
+          <figure class="canvas">
+            <img class="plot" src="cmlh_figures/qualitative_plot.png" alt="Joint-angle trajectories (mean ± variability) across a step-up cycle." />
+            <figcaption>
+              Mean ± variability for hip, knee, and ankle angles across the step-up cycle.
+              Mid-stance knee flexion and frontal-plane hip motion align with clinician-flagged errors.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Figure 2 -->
+      <section aria-labelledby="f2">
+        <h2 id="f2">Classification Pipeline</h2>
+        <div class="row two">
+          <figure class="canvas">
+            <img src="cmlh_figures/f2.png" alt="Pipeline: single-view fit → multi-view autocalibration → IMU fusion → kinematics → classifier." />
+            <figcaption>
+              Three stages: (1) single-view mesh fitting; (2) multi-view autocalibration; (3) IMU fusion with automatic sensor alignment. Extracted kinematics feed the classifier for error detection.
+            </figcaption>
+          </figure>
+          <ul>
+            <li>Extracted joint angles + derivatives mirror clinician reasoning.</li>
+            <li>Random-Forest classifier detects: insufficient knee flexion, outward trunk lean, and hip hiking.</li>
+            <li>Compared against baselines using raw joint positions.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Table 1 -->
+      <section aria-labelledby="t1">
+        <h2 id="t1">Classification Performance</h2>
+        <figure class="canvas">
+          <img src="cmlh_figures/t1.png" alt="Precision/Recall/F1/Accuracy for single-view, multi-view, IMU-alone, and fusion." />
+          <figcaption>
+            Fusion (multi-view + IMU with autocalibration) outperforms baselines and approaches inter-clinician agreement.
+          </figcaption>
+        </figure>
+      </section>
+    </article>
+
+    <footer>© <script>document.write(new Date().getFullYear())</script> Kunwoo Lee</footer>
+  </div>
+
+  <script>
+    // Theme toggle
+    const root=document.documentElement;
+    const saved=localStorage.getItem('theme');
+    if(saved) root.setAttribute('data-theme',saved);
+    const btn=document.getElementById('themeToggle');
+    const setTheme=(mode)=>{root.setAttribute('data-theme',mode);localStorage.setItem('theme',mode);btn?.setAttribute('aria-pressed',String(mode==='light'));};
+    btn?.addEventListener('click',()=>{const next=root.getAttribute('data-theme')==='light'?'dark':'light';setTheme(next);});
+    btn?.setAttribute('aria-pressed',String(root.getAttribute('data-theme')==='light'));
+  </script>
+</body>
+</html>

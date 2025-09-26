@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kunwoo Lee – Portfolio</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg:#0b0c10; --panel:#111218; --text:#e9eaee; --muted:#b6b8c3;
+      --accent:#6ee7b7; --accent-2:#60a5fa; --accent-3:#247BA0; --border:#232533;
+      --shadow:0 10px 30px rgba(0,0,0,.25); --radius:16px; --maxw:1050px;
+    }
+    [data-theme="light"] {
+      --bg:#ffffff; --panel:#f6f7fb; --text:#111218; --muted:#4b5563;
+      --accent:#059669; --accent-2:#2563eb; --border:#e5e7eb;
+      --shadow:0 12px 28px rgba(2,6,23,.08);
+    }
+
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      background: var(--bg); color: var(--text); line-height: 1.55;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }
+
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 24px; }
+
+    .card {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px;
+    }
+
+    header.page { display:flex; justify-content: flex-end; gap:12px; margin-bottom:16px; }
+    .btn {
+      appearance:none; border:1px solid var(--border); background:transparent; color:var(--text);
+      padding:10px 14px; border-radius:999px; cursor:pointer; font-weight:500;
+    }
+    .btn:hover { border-color: var(--accent); }
+
+    /* About (merged namecard) */
+    .about { display:grid; grid-template-columns: 120px 1fr; gap:16px; align-items:start; }
+    @media (max-width:640px){ .about { grid-template-columns:1fr; } }
+    .avatar { width:120px; height:120px; border-radius:20px; object-fit:cover; border:2px solid var(--border); }
+    .name { margin:0; font-size:1.8rem; font-weight:600; }
+    .role { margin:6px 0 12px; color:var(--muted); font-size:.98rem; }
+    .contact { margin:12px 0; display:flex; flex-wrap:wrap; gap:10px; }
+    .chip {
+      display:inline-flex; align-items:center; gap:10px; color:var(--text); text-decoration:none;
+      padding:8px 12px; border:1px solid var(--border); border-radius:12px;
+    }
+    .chip:hover { border-color:var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+
+    h2.section { margin:22px 0 10px; font-size:1.35rem; }
+    .muted { color: var(--muted); }
+
+    /* Research grid */
+    .grid4 { display:grid; grid-template-columns: repeat(2, 1fr); gap:14px; }
+    @media (max-width:900px){ .grid4 { grid-template-columns:1fr; } }
+    a.research { display:block; text-decoration:none; color:inherit; }
+    .tile {
+      border:1px solid var(--border); border-radius:14px; overflow:hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.02));
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+    .tile:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 14px 36px rgba(0,0,0,.28); }
+    .tile .body { padding:12px; }
+    .tile .title { margin:2px 0 6px; font-size:1.05rem; font-weight:600; }
+    .tile .when { font-size:.85rem; color:var(--muted); margin-bottom:6px; }
+    .tile .desc { color:var(--muted); margin:0; }
+
+    /* CV */
+    .cv-embed { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: #fff; }
+
+    .research-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 18px;
+      align-items: flex-start;
+    }
+    .research-row:last-child { margin-bottom: 0; }
+
+    .research-row .thumb {
+      flex: 0 0 140px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+    .research-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 18px;
+      align-items: flex-start;
+      text-decoration: none;
+      color: inherit;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+    .research-row:hover {
+      border-color: var(--accent);
+      box-shadow: 0 8px 20px rgba(0,0,0,.25);
+      transform: translateY(-2px);
+    }
+    .research-row:last-child { margin-bottom: 0; }
+
+    .research-row .thumb {
+      flex: 0 0 140px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+    .research-row .body { flex: 1; }
+    .research-row .title { margin: 0 0 4px; font-size: 1.1rem; font-weight: 600; }
+    .research-row .when { font-size: .9rem; color: var(--muted); margin-bottom: 6px; }
+    .research-row .desc { margin: 0; color: var(--muted); }
+
+    @media (max-width:640px) {
+      .research-row { flex-direction: column; }
+      .research-row .thumb { width: 100%; height: auto; }
+    }
+
+    .about-card { margin-bottom: 18px; }
+    .narrative { font-size: 1.05rem; line-height: 1.75; max-width: 75ch; }
+    .narrative p { margin: 1rem 0; }
+    .narrative .highlight { color: var(--accent); font-weight: 600; }
+    .narrative .highlight-2 { color: var(--accent-2); font-weight: 600; }
+    .narrative .highlight-3 { color: var(--accent-3); font-weight: 600; }
+    .narrative .closing { font-size: 1.08rem; font-weight: 500; margin-top: 1.4rem; }
+
+    footer { margin-top:18px; text-align:center; color:var(--muted); font-size:.9rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="page">
+      <button class="btn" id="themeToggle" aria-pressed="false" title="Toggle light/dark">🌓 Theme</button>
+    </header>
+<!-- ABOUT -->
+<section class="card about-card">
+  <div class="about-header">
+    <img class="avatar" src="./assets/images/profile_photo.jpeg"
+        alt="Portrait of Kunwoo Lee" width="120" height="120" loading="eager" />
+    <div>
+      <h1 class="name">Kunwoo Lee</h1>
+      <p class="role">M.S. Mechanical Engineering @ Carnegie Mellon University</p>
+      <div class="contact" aria-label="Contact and links">
+        <a class="chip" href="mailto:kunwool@andrew.cmu.edu">📧 Email</a>
+        <a class="chip" target="_blank" rel="noopener" href="https://www.linkedin.com/in/leekunwoo/">🔗 LinkedIn</a>
+        <a class="chip" href="./assets/CV.pdf" download>↓ CV</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="narrative">
+    <p>
+      Hi 👋, I'm <strong class="highlight">Kunwoo Lee</strong> —
+      a Master's student in <span class="highlight-2">Mechanical Engineering</span> at
+      <span class="highlight-2">Carnegie Mellon University</span>, where I'm developing
+      next-generation <strong>AI systems</strong> that make
+      human-movement analysis more <strong>accessible</strong> and
+      <strong>clinically meaningful</strong>.
+      My research sits at the exciting intersection of computer vision, sensor fusion, and biomechanical modeling
+      that can understand human motion in ways previously thought impossible.
+    </p>
+
+    <p>
+      At CMU, I joined the 
+      <a href="https://www.meche.engineering.cmu.edu/faculty/halilaj-musculoskeletal-biomechanics-lab.html" target="_blank" rel="noopener" class="highlight-2">
+        Musculoskeletal Biomechanics Lab
+      </a> 
+      under
+      <strong class="highlight-2">Prof. Eni Halilaj</strong>, where I work on projects pushing the boundaries of biomechanics and AI.
+      Our mission is to build AI systems that don’t just analyze human movement —
+      but make that analysis <strong>accessible</strong>,
+      <strong>clinically relevant</strong>, and
+      <strong>transformative</strong> for researchers and patients alike.
+    </p>
+      <!-- I’m currently building a <span class="highlight">generative AI system</span> that can recover
+      full-body kinematics from only a few accessible sensors like VR headsets and controllers —
+      with the potential to <span class="highlight-2">democratize biomechanics research</span> and
+      clinical assessment by eliminating the need for expensive labs while preserving rigor. -->
+
+    <!-- <p>
+      A recent breakthrough was a <strong class="highlight">calibration-free multimodal PT assessment system</strong>
+      combining computer vision and IMU sensing. Our AI-powered approach
+      exceeded clinician agreement benchmarks at <span class="highlight-2">66.8%</span>,
+      showing that machine learning can reach expert-level consensus in clinical evaluation —
+      a milestone that could transform patient monitoring.
+    </p>
+
+    <p>
+      I’ve also been validating the <span class="highlight">next frontier of markerless motion capture</span>,
+      introducing frameworks that simulate real-world uncertainty to bridge the gap between
+      lab-grade precision and accessible field applications. This work is helping define when
+      computer-vision approaches can match gold-standard motion capture.
+    </p>
+
+    <p>
+      Beyond biomechanics, I explore <span class="highlight-2">human–computer interaction</span>
+      through my work on <strong class="highlight">sEMG-based keyboards-free typing</strong>,
+      where we developed transformer models translating muscle signals into keyboard input with
+      a <span class="highlight-2">25% accuracy improvement</span> over prior methods.
+    </p> -->
+    <!-- 
+    <p class="closing">
+      My mission: build AI systems that don’t just analyze human movement —
+      but make that analysis <span class="highlight">accessible</span>,
+      <span class="highlight">clinically relevant</span>, and
+      <span class="highlight-2">transformative</span> for researchers and patients alike.
+    </p> -->
+  </div>
+</section>
+
+  <!-- RESEARCH EXPERIENCE — MASTER’S -->
+  <section class="card" style="margin-top:16px;">
+    <h2 class="section">Research Experience — Master’s</h2>
+
+    <a class="research-row" href="projects/3p_tracking.html">
+      <img src="projects/3p_tracking_figures/thumbnail.mp4" alt="Sparse-sensor motion tracking thumbnail" class="thumb">
+      <div class="body">
+        <h3 class="title">Sparse-Sensor Motion Tracking for Accessible Biomechanics</h3>
+        <div class="when">Aug 2025 – Present · CMU</div>
+        <p class="desc">Generative AI to recover full-body kinematics from sparse, accessible sensors (VR HMD + controllers); extensible to RGB/IMU; robust to single-leg/OOD motions.</p>
+      </div>
+    </a>
+
+    <a class="research-row" href="projects/CMLH.html">
+      <img src="projects/cmlh_figures/calibration_downsized.mp4" alt="Calibration-free PT assessment thumbnail" class="thumb">
+      <div class="body">
+        <h3 class="title">Calibration-Free Multimodal Physical Therapy (PT) Assessment</h3>
+        <div class="when">May 2025 – Aug 2025 · CMU</div>
+        <p class="desc">Autocalibration of dual RGB extrinsics and IMU-to-bone alignment; kinematics-driven classifier that approaches clinician agreement for correctness detection.</p>
+      </div>
+    </a>
+
+    <a class="research-row" href="projects/benchmark_kinetics.html">
+      <img src="projects/benchmark_figures/walking_downsized.mp4" alt="Human kinetics validation thumbnail" class="thumb">
+      <div class="body">
+        <h3 class="title">Validating Computer Vision-based Human Kinetics Estimation</h3>
+        <div class="when">Sep 2024 – Aug 2025 · CMU</div>
+        <p class="desc">Benchmarked commercial/open-source pipelines vs. marker-based ground truth; proposed a validation framework simulating marker registration uncertainty.</p>
+      </div>
+    </a>
+
+    <a class="research-row" href="projects/emg2qwerty.html">
+      <img src="projects/emg2qwerty_figures/demo_thumbnail_downsized.mp4" alt="sEMG typing thumbnail" class="thumb">
+      <div class="body">
+        <h3 class="title">sEMG-Based Keyboards-Free Typing with Deep Learning</h3>
+        <div class="when">Jan 2025 – May 2025 · CMU</div>
+        <p class="desc">Transformer-based model mapping wrist sEMG to keyboard inputs; ~25% accuracy gain over a TDSN baseline; reproducible training on HPC (Slurm).</p>
+      </div>
+    </a>
+  </section>
+
+  <!-- RESEARCH EXPERIENCE — Undergrad -->
+  <section class="card" style="margin-top:16px;">
+    <h2 class="section">Research Experience — Undergraduate</h2>
+
+    <a class="research-row" href="projects/tif.html">
+      <img src="projects/tif_figures/thumbnail.png" alt="TIF equity analysis thumbnail" class="thumb">
+      <div class="body">
+        <h3 class="title">Equity Analysis of Tax Increment Financing (TIF)</h3>
+        <div class="when">Jan 2024 – May 2024 · IIT</div>
+        <p class="desc">Analyzed economic disparities in TIF vs. non-TIF districts; uncovered disproportionate benefits for White, higher-income wards using clustering methods; presented findings at Illinois Tech Innovation Day.</p>
+      </div>
+    </a>
+
+    <a class="research-row" href="projects/airfoil.html">
+      <img src="projects/airfoil_figures/thumbnail.png" alt="Airfoil CNN thumbnail" class="thumb">
+      <div class="body">
+        <h3 class="title">CNN-Based Estimation of Airfoil Kinematics</h3>
+        <div class="when">Jan 2023 – May 2024 · IIT</div>
+        <p class="desc">Built and trained a CNN to predict airfoil pitching kinematics from wake flow snapshots (>90% accuracy); leveraged DNS simulations of periodic and non-periodic motions for robust training and evaluation.</p>
+      </div>
+    </a>
+
+    <a class="research-row" href="projects/inha.html">
+      <img src="projects/inha_figures/thumb.png" alt="Healthcare AI thumbnail" class="thumb">
+      <div class="body">
+        <h3 class="title">AI & Computational Modeling for Healthcare Applications</h3>
+        <div class="when">Jan 2022 – Jul 2022 · Inha Univ.</div>
+        <p class="desc">Classified 5 arrhythmia types from ECG with CNN (98.6% accuracy, surpassing state-of-the-art); modeled vascular bypass hemodynamics via CFD, showing how angle and porosity affect patency.</p>
+      </div>
+    </a>
+  </section>
+
+  <script>
+    // Theme
+    const root = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    if (saved) {
+      root.setAttribute('data-theme', saved);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      root.setAttribute('data-theme', 'light');
+    }
+    const themeBtn = document.getElementById('themeToggle');
+    const setTheme = (mode) => {
+      root.setAttribute('data-theme', mode);
+      localStorage.setItem('theme', mode);
+      themeBtn?.setAttribute('aria-pressed', String(mode === 'light'));
+    };
+    themeBtn?.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      setTheme(next);
+    });
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
