@@ -4,73 +4,230 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light dark" />
-  <title>Does Markerless Motion Tracking Hold Up Under Load? – Blog Post</title>
+  <title>Does Markerless Motion Tracking Hold Up Under Load? – Kunwoo Lee</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root{
       --bg:#0b0c10; --panel:#111218; --text:#e9eaee; --muted:#b6b8c3;
-      --border:#232533; --accent:#06b6d4; --canvas:#ffffff; --radius:14px;
-      --maxw:760px; --shadow:0 10px 28px rgba(0,0,0,.18);
+      --border:#232533; --accent:#06b6d4; --accent-2:#0ea5e9;
+      --canvas:#ffffff; --radius:16px;
+      --maxw:820px; --shadow:0 10px 28px rgba(0,0,0,.18);
     }
     [data-theme="light"]{
       --bg:#ffffff; --panel:#f7f8fb; --text:#0f172a; --muted:#475569;
-      --border:#e5e7eb; --accent:#0ea5e9; --canvas:#ffffff; --shadow:0 8px 24px rgba(2,6,23,.06);
+      --border:#e5e7eb; --accent:#0ea5e9; --accent-2:#06b6d4;
+      --canvas:#ffffff; --shadow:0 8px 24px rgba(2,6,23,.06);
     }
 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     html,body{height:100%}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.8;font-size:1.05rem}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      line-height:1.75;
+      font-size:1.05rem
+    }
 
-    .wrap{max-width:var(--maxw);margin:0 auto;padding:28px 18px}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:32px 24px}
 
-    /* Top */
-    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-    .back{color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:6px 10px;border-radius:999px}
-    .back:hover{color:var(--text);border-color:var(--accent)}
-    .btn{appearance:none;border:1px solid var(--border);background:transparent;color:var(--text);padding:6px 10px;border-radius:999px;cursor:pointer}
-    .btn:hover{border-color:var(--accent)}
+    /* Top bar */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:24px;
+      gap: 16px;
+    }
+    .back{
+      color:var(--text);
+      text-decoration:none;
+      border:1px solid var(--border);
+      padding:10px 16px;
+      border-radius:12px;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .back:hover{
+      border-color:var(--accent);
+      transform: translateX(-4px);
+    }
+    .btn{
+      appearance:none;
+      border:1px solid var(--border);
+      background:transparent;
+      color:var(--text);
+      padding:10px 16px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .btn:hover{
+      border-color:var(--accent);
+      background: rgba(6, 182, 212, 0.1);
+    }
 
     /* Blog card */
-    article{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px}
-    header{margin-bottom:10px}
-    h1{font-size:clamp(1.6rem,1.2rem+1.8vw,2.2rem);line-height:1.25;margin:0 0 6px}
-    .deck{color:var(--muted);margin:0 0 12px}
-    .meta{display:flex;flex-wrap:wrap;gap:10px;color:var(--muted);font-size:.96rem}
-    .meta .dot::before{content:"•";margin:0 .5ch}
-    .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .tag{border:1px dashed var(--border);border-radius:999px;padding:2px 10px;color:var(--muted);font-size:.9rem}
+    article{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:40px;
+    }
+    
+    @media (max-width: 640px) {
+      article { padding: 28px 20px; }
+    }
+    
+    header{margin-bottom:32px; padding-bottom: 24px; border-bottom: 2px solid var(--border);}
+    
+    h1{
+      font-size:clamp(1.8rem,1.4rem+2vw,2.5rem);
+      line-height:1.25;
+      margin:0 0 16px;
+      background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .deck{
+      color:var(--muted);
+      margin:0 0 20px;
+      font-size: 1.15rem;
+      line-height: 1.6;
+    }
+    
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      color:var(--muted);
+      font-size:.95rem;
+      margin-bottom: 16px;
+    }
+    .meta .dot::before{content:"•";margin:0 .6ch}
+    
+    .tags{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+    .tag{
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:6px 14px;
+      color:var(--muted);
+      font-size:.85rem;
+      background: rgba(6, 182, 212, 0.05);
+      font-weight: 500;
+    }
 
     /* Prose */
-    .prose p{margin:1rem 0}
-    .prose h2{font-size:1.25rem;margin:1.6rem 0 .6rem}
-    .prose hr{border:none;border-top:1px solid var(--border);margin:18px 0}
-    .callout{border-left:3px solid var(--accent);background:color-mix(in oklab, var(--panel) 88%, var(--accent) 12%);padding:12px 14px;border-radius:10px;color:var(--text)}
+    .prose p{margin:1.4rem 0; font-size: 1.05rem;}
+    .prose p:first-of-type { font-size: 1.1rem; color: var(--text); }
+    
+    .prose h2{
+      font-size:1.5rem;
+      margin:2.5rem 0 1rem;
+      color: var(--text);
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--border);
+    }
+    
+    .prose h2:first-of-type { margin-top: 1.5rem; }
+    
+    .prose hr{
+      border:none;
+      border-top:2px solid var(--border);
+      margin:32px 0;
+    }
+    
+    .callout{
+      border-left:4px solid var(--accent);
+      background: rgba(6, 182, 212, 0.08);
+      padding:20px 24px;
+      border-radius:12px;
+      color:var(--text);
+      margin: 1.5rem 0;
+      line-height: 1.7;
+    }
+    
+    [data-theme="light"] .callout {
+      background: rgba(6, 182, 212, 0.06);
+    }
 
     /* Figures */
-    figure{margin:1.1rem 0}
-    .fig-canvas{background:var(--canvas);border:1px solid var(--border);border-radius:12px;padding:10px;box-shadow:0 8px 22px rgba(0,0,0,.10)}
-    .fig-canvas img{display:block;width:100%;height:auto;border-radius:10px}
-    figcaption{margin-top:8px;color:var(--muted);font-size:.95rem;text-align:center}
+    figure{margin:2rem 0}
+    
+    .fig-canvas{
+      background:var(--canvas);
+      border:2px solid var(--border);
+      border-radius:14px;
+      padding:16px;
+      box-shadow:0 8px 24px rgba(0,0,0,.12);
+      transition: all 0.3s ease;
+    }
+    
+    .fig-canvas:hover {
+      box-shadow: 0 12px 32px rgba(0,0,0,.18);
+      border-color: var(--accent);
+    }
+    
+    .fig-canvas img{
+      display:block;
+      width:100%;
+      height:auto;
+      border-radius:8px;
+    }
+    
+    figcaption{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:.95rem;
+      text-align:center;
+      line-height: 1.6;
+      padding: 0 16px;
+    }
 
-    footer{color:var(--muted);text-align:center;margin:18px 0 6px;font-size:.95rem}
+    footer{
+      color:var(--muted);
+      text-align:center;
+      margin:32px 0 12px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-size:.9rem;
+    }
+    
+    strong {
+      color: var(--text);
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="topbar">
-      <a class="back" href="../index.html">← Back</a>
+      <a class="back" href="../index.html#masters">← Back to Home</a>
       <button class="btn" id="themeToggle" aria-pressed="false" title="Toggle light/dark">🌓 Theme</button>
     </div>
 
     <article>
       <header>
         <h1>Does Markerless Motion Tracking Hold Up Under Load?</h1>
-        <p class="deck">Evaluating multi‑view methods for lower‑extremity joint‑moment estimation</p>
+        <p class="deck">Evaluating multi-view methods for lower-extremity joint-moment estimation</p>
         <div class="meta">
-          <span>By Kunwoo Lee</span><span class="dot"></span>
+          <!-- <span>By Kunwoo Lee</span><span class="dot"></span>
           <time datetime="2025-09-25">Sep 25, 2025</time><span class="dot"></span>
-          <span>~6 min read</span>
+          <span>~6 min read</span> -->
         </div>
         <div class="tags" aria-label="Tags">
           <span class="tag">Markerless MoCap</span>
@@ -81,46 +238,75 @@
       </header>
 
       <section class="prose">
-        <p>We jointly captured multi‑view RGB, a marker‑based system, and ground‑reaction forces to compare joint‑moment estimation across commercial and open‑source pipelines under identical conditions. Tasks ranged from overground walking to single‑leg squat and lateral step‑down.</p>
+        <p>
+          We jointly captured multi-view RGB, a marker-based system, and ground-reaction forces to compare 
+          joint-moment estimation across commercial and open-source pipelines under identical conditions. 
+          Tasks ranged from overground walking to single-leg squat and lateral step-down.
+        </p>
 
         <figure>
           <div class="fig-canvas">
-            <img src="benchmark_figures/fig1.png" alt="Experimental setup with multi‑view RGB, marker‑based system, and force plates" loading="lazy" decoding="async" />
+            <img src="benchmark_figures/fig1.png" alt="Experimental setup with multi-view RGB, marker-based system, and force plates" loading="lazy" decoding="async" />
           </div>
-          <figcaption>Experimental setup and task protocol.</figcaption>
+          <figcaption>Experimental setup and task protocol for benchmarking markerless motion capture systems.</figcaption>
         </figure>
 
         <h2>How we compared methods</h2>
-        <p>We benchmarked three computer‑vision‑based kinetics pipelines: Theia3D, OpenCap with force plates, and OpenCap without force plates (muscle‑driven dynamic optimization). Errors were computed relative to the synchronized marker‑based analysis.</p>
+        <p>
+          We benchmarked three computer-vision-based kinetics pipelines: <strong>Theia3D</strong>, 
+          <strong>OpenCap with force plates</strong>, and <strong>OpenCap without force plates</strong> 
+          (muscle-driven dynamic optimization). Errors were computed relative to the synchronized marker-based analysis.
+        </p>
 
-        <h2>Overall accuracy favors force‑augmented pipelines</h2>
+        <h2>Overall accuracy favors force-augmented pipelines</h2>
         <figure>
           <div class="fig-canvas">
             <img src="benchmark_figures/fig2.png" alt="RMSD accuracy across methods and tasks" loading="lazy" decoding="async" />
           </div>
-          <figcaption>Theia3D showed the lowest RMSD (~1% H×BW). OpenCap improved with force‑plate input, typically ~1.5–2% H×BW.</figcaption>
+          <figcaption>
+            Theia3D showed the lowest RMSD (~1% H×BW). OpenCap improved with force-plate input, 
+            typically achieving ~1.5–2% H×BW across joints and tasks.
+          </figcaption>
         </figure>
 
         <h2>Does RMSD capture everything?</h2>
-        <p>Despite magnitude differences, the timing and shape of moment curves were highly correlated—particularly for Theia3D—which is crucial for phase‑dependent analyses. OpenCap with force plates showed slightly better temporal consistency than without. RMSD alone can miss these temporal nuances.</p>
+        <p>
+          Despite magnitude differences, the timing and shape of moment curves were highly correlated—particularly 
+          for Theia3D—which is crucial for phase-dependent analyses. OpenCap with force plates showed slightly 
+          better temporal consistency than without. RMSD alone can miss these temporal nuances.
+        </p>
         <figure>
           <div class="fig-canvas">
             <img src="benchmark_figures/fig4.png" alt="Temporal agreement plots showing waveform correlation and timing alignment" loading="lazy" decoding="async" />
           </div>
-          <figcaption>Waveform correlation and timing alignment across methods.</figcaption>
+          <figcaption>Waveform correlation and timing alignment across methods, revealing strong temporal agreement despite magnitude errors.</figcaption>
         </figure>
 
         <h2>Context: comparing to an imperfect reference</h2>
-        <p class="callout">Marker‑based motion capture has its own uncertainty. A 1&nbsp;cm marker registration error can induce sizeable joint‑angle and moment deviations; simulated marker placement offsets during running also produce multi‑degree variability. Interpreting markerless errors through this lens can be more informative than absolute RMSD alone.</p>
+        <p class="callout">
+          <strong>Important consideration:</strong> Marker-based motion capture has its own uncertainty. 
+          A 1 cm marker registration error can induce sizeable joint-angle and moment deviations; simulated 
+          marker placement offsets during running also produce multi-degree variability. Interpreting markerless 
+          errors through this lens can be more informative than absolute RMSD alone.
+        </p>
         <figure>
           <div class="fig-canvas">
             <img src="benchmark_figures/fig5.png" alt="Markerless error contextualized by marker registration uncertainty" loading="lazy" decoding="async" />
           </div>
-          <figcaption>Markerless vs. marker‑based uncertainty: where each method sits.</figcaption>
+          <figcaption>
+            Markerless vs. marker-based uncertainty: contextualizing where each method sits relative to 
+            the inherent variability in the gold-standard reference system.
+          </figcaption>
         </figure>
 
         <hr />
-        <p><strong>Takeaway:</strong> Multi‑view markerless methods can be viable for ankle and knee joint moments, while hip moments remain challenging. For small expected effects (e.g., ~1.2% H×BW hip‑moment changes from assistance devices), sensitivity may be insufficient today.</p>
+        
+        <p>
+          <strong>Takeaway:</strong> Multi-view markerless methods can be viable for ankle and knee joint moments, 
+          while hip moments remain challenging. For small expected effects (e.g., ~1.2% H×BW hip-moment changes 
+          from assistance devices), sensitivity may be insufficient today. However, the strong temporal agreement 
+          suggests these methods are valuable for phase-based analyses even when absolute magnitudes have larger errors.
+        </p>
       </section>
     </article>
 
